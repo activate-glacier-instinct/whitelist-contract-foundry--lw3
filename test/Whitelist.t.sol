@@ -15,13 +15,17 @@ contract WhitelistTest is Test {
         assertEq(whitelist.maxWhitelistedAddresses(), 10);
     }
 
-    // function testIncrement() public {
-    //     counter.increment();
-    //     assertEq(counter.number(), 1);
-    // }
-
-    // function testSetNumber(uint256 x) public {
-    //     counter.setNumber(x);
-    //     assertEq(counter.number(), x);
-    // }
+    function testAddToWhitelist() public {
+        // Should be able to add an address to the whitelist
+        vm.prank(address(0));
+        whitelist.addAddressToWhitelist();
+        assertEq(whitelist.numAddressesWhitelisted(), 1);
+    }
+    function testFailAddToWhitelist() public {
+        // Should not be able to add the same address twice
+        vm.prank(address(0));
+        vm.expectRevert(bytes("Sender has already been whitelisted"));
+        whitelist.addAddressToWhitelist();
+        assertEq(whitelist.numAddressesWhitelisted(), 1);
+    }
 }
