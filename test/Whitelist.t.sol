@@ -8,11 +8,11 @@ contract WhitelistTest is Test {
     Whitelist public whitelist;
 
     function setUp() public {
-        whitelist = new Whitelist(10);
+        whitelist = new Whitelist(2);
     }
 
     function testMaxWhitelist() public {
-        assertEq(whitelist.maxWhitelistedAddresses(), 10);
+        assertEq(whitelist.maxWhitelistedAddresses(), 2);
     }
 
     function testAddToWhitelist() public {
@@ -27,5 +27,20 @@ contract WhitelistTest is Test {
         vm.expectRevert(bytes("Sender has already been whitelisted"));
         whitelist.addAddressToWhitelist();
         assertEq(whitelist.numAddressesWhitelisted(), 1);
+    }
+    function testCannotWhitelistExcedingMax() public {
+        // Add more than max addresses
+        vm.prank(address(1));
+        whitelist.addAddressToWhitelist();
+        assertEq(whitelist.numAddressesWhitelisted(), 1);
+        vm.prank(address(2));
+        whitelist.addAddressToWhitelist();
+        assertEq(whitelist.numAddressesWhitelisted(), 2);
+        vm.prank(address(3));
+        // Should not be able to add to add more address than the original max specified
+        vm.expectRevert(bytes("More addresses cant be added, limit reached"));
+        whitelist.addAddressToWhitelist();
+        // Number of whitelisted addresses should match the max
+        assertEq(whitelist.numAddressesWhitelisted(), whitelist.maxWhitelistedAddresses());
     }
 }
