@@ -1,7 +1,7 @@
 # Todo's
 
-- [ ] create contract
-- [ ] add Foundry tests
+- [x] create contract
+- [x] add Foundry tests
 - [ ] how to specify specific Solidity version in Foundry
 - [ ] how to deploy Foundry contract to goerli
     - [ ] must return deployed address
