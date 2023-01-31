@@ -8,7 +8,11 @@ contract WhitelistScript is Script {
     function setUp() public {}
 
     function run() public {
-        vm.broadcast();
-        new Whitelist(2); // Max whitelist is 2 addresses
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY");
+        vm.startBroadcast(deployerPrivateKey);
+
+        Whitelist whitelist = new Whitelist(2); // Max whitelist is 2 addresses
+
+        vm.stopBroadcast();
     }
 }
